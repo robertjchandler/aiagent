@@ -1,4 +1,4 @@
-# tests.py
+#!/bin/python3
 
 import unittest
 from pkg.calculator import Calculator

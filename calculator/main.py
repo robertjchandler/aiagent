@@ -1,4 +1,4 @@
-# main.py
+#!/bin/python3
 
 import sys
 from pkg.calculator import Calculator
