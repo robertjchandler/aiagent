@@ -5,6 +5,7 @@ from google.genai import types
 
 from prompts import system_prompt
 from call_function import available_functions
+from functions.call_function import call_function
 
 def main():
     load_dotenv("apikey.env")
@@ -25,7 +26,11 @@ def main():
         config=types.GenerateContentConfig(tools=[available_functions], system_instruction=system_prompt),
     )
 
+    verbose = False
     if len(sys.argv) == 3 and sys.argv[2] == "--verbose":
+        verbose = True
+
+    if verbose:
         print("User prompt:", user_prompt)
         print("Prompt tokens:", response.usage_metadata.prompt_token_count)
         print("Response tokens:", response.usage_metadata.candidates_token_count)
@@ -33,6 +38,8 @@ def main():
     if response.function_calls:
         for function_call_part in response.function_calls:
             print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+            result = call_function(function_call_part, verbose)
+            print(result)
     else:
         print("Response:")
         print(response.text)
